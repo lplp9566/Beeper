@@ -14,3 +14,14 @@ export const writeBeeperToJsonFile = (newBeeper) => __awaiter(void 0, void 0, vo
     beepers.push(newBeeper);
     yield jsonfile.writeFile(DB_FILE_PATH, beepers);
 });
+export const getAllBeepersFromJson = () => __awaiter(void 0, void 0, void 0, function* () {
+    const beepers = yield jsonfile.readFile(DB_FILE_PATH);
+    return beepers;
+});
+export const editBeeperToJsonFile = (editBeeper) => __awaiter(void 0, void 0, void 0, function* () {
+    const beepers = yield getAllBeepersFromJson();
+    console.log(beepers);
+    const oldBeeper = beepers.find((u) => u.id === editBeeper.id);
+    beepers[beepers.indexOf(oldBeeper)] = editBeeper;
+    yield jsonfile.writeFile(DB_FILE_PATH, beepers);
+});

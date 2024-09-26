@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { v4 as uuidv4 } from "uuid";
 import { status } from "../models/types.js";
-import { writeBeeperToJsonFile } from "../DAL/jsonBeeper.js";
+import { writeBeeperToJsonFile, getAllBeepersFromJson, editBeeperToJsonFile } from "../DAL/jsonBeeper.js";
 export const creeteBeeper = (nameOfBeeper) => __awaiter(void 0, void 0, void 0, function* () {
     const newBeeperId = uuidv4();
     const newBepper = {
@@ -20,4 +20,62 @@ export const creeteBeeper = (nameOfBeeper) => __awaiter(void 0, void 0, void 0, 
     };
     yield writeBeeperToJsonFile(newBepper);
     return newBeeperId;
+});
+export const getTheBeepers = () => __awaiter(void 0, void 0, void 0, function* () {
+    const beepers = yield getAllBeepersFromJson();
+    return beepers;
+});
+export const getBeeper = (beeperId) => __awaiter(void 0, void 0, void 0, function* () {
+    const beepers = yield getAllBeepersFromJson();
+    const beeper = beepers.find(be => { return be.id == beeperId; });
+    if (!beeper) {
+        throw new Error("Invalid beeper by the id 🥵.");
+    }
+    return beeper;
+});
+export const setStatus = (beeperid, LAT, LON) => __awaiter(void 0, void 0, void 0, function* () {
+    const beepers = yield getAllBeepersFromJson();
+    const beeper = beepers.find(be => { return be.id == beeperid; });
+    if ((beeper === null || beeper === void 0 ? void 0 : beeper.status) < 4) {
+        let newStatus = 0;
+        switch (beeper === null || beeper === void 0 ? void 0 : beeper.status) {
+            case 0:
+                newStatus = 1;
+                break;
+            case 1:
+                newStatus = 2;
+                break;
+            case 2:
+                newStatus = 3;
+                break;
+            case 3:
+                yield beeperBoom(beeper);
+                newStatus = 4;
+                break;
+            default:
+                break;
+        }
+        const newBepper = {
+            id: beeperid,
+            name: beeper.name,
+            status: newStatus,
+            created_at: beeper.created_at,
+        };
+        yield editBeeperToJsonFile(newBepper);
+        return newBepper.status;
+    }
+    else {
+        throw new Error("Invalid beeper by the id 🥵.");
+    }
+});
+export const beeperBoom = (beeper) => __awaiter(void 0, void 0, void 0, function* () {
+    let time = 10;
+    const startBooming = setInterval(() => {
+        console.log(`is gowning to explode in ${time} seconds`);
+        time -= 1;
+        if (time == 0) {
+            clearInterval(startBooming);
+            console.log("💥💥💥💥💥💥");
+        }
+    }, 1000);
 });

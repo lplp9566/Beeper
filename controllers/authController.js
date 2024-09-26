@@ -52,8 +52,8 @@ export const getBeeperById = (req, res) => __awaiter(void 0, void 0, void 0, fun
 export const editStatus = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const beeperId = req.params.id;
-        const LAT = req.body.LAT || undefined;
-        const LON = req.body.LON || undefined;
+        const LAT = req.body.latitude || undefined;
+        const LON = req.body.Longitude || undefined;
         if (!beeperId) {
             res.status(400).json({ error: "beeper not fond🤦‍♀️🤦‍♀️." });
             return;

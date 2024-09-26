@@ -2,6 +2,7 @@ import { promises } from "dns";
 import express, {Request,Response} from "express";
 import {creeteBeeper,getTheBeepers,getBeeper,setStatus} from "../services/beeperService.js"
 import { error } from "console";
+import {Longitude,Latitude}from "../models/types.js"
 
 
 export const createBeeper = async(req: Request,res:Response):Promise<void>=>{
@@ -35,6 +36,7 @@ export const getAllBeepers = async(req:Request,res:Response)=>{
 }
 export const getBeeperById = async(req:Request,res:Response)=>{
     try{
+
          const beeperId = req.params.id;
         if (!beeperId ) {
             res.status(400).json({ error: "beeper not fond🤦‍♀️🤦‍♀️." });
@@ -53,14 +55,17 @@ export const getBeeperById = async(req:Request,res:Response)=>{
 export const editStatus = async (req:Request,res:Response)=>{
     try{
         const beeperId = req.params.id;
-        const LAT = req.body.LAT ||undefined 
-        const LON = req.body.LON || undefined
+        const LAT = req.body.latitude ||undefined 
+        const LON = req.body.Longitude || undefined
         if (!beeperId ) {
             res.status(400).json({ error: "beeper not fond🤦‍♀️🤦‍♀️." });
             return;
           }
-          const newStatus = await setStatus(beeperId,LAT,LON)
-          res.status(200).json({theNewStatusIs:newStatus}) 
+       
+            const newStatus = await setStatus(beeperId,LAT,LON)
+            res.status(200).json({theNewStatusIs:newStatus}) 
+        
+         
     }
     catch(error){
         console.error( error);
